@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: parkin-backend
+    env: node
+    region: ohio
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    
+    # Root directory where package.json is located
+    rootDir: backend
+    
+    # Environment variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://parkin2.netlify.app
+
+# MongoDB connection should be configured in Render dashboard
+# Add MONGODB_URI from MongoDB Atlas as a secret environment variable
