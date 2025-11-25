@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: parkin-mongodb
+    restart: unless-stopped
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-admin123}
+      MONGO_INITDB_DATABASE: parkin
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - parkin-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test -u ${MONGO_USER:-admin} -p ${MONGO_PASSWORD:-admin123} --authenticationDatabase admin
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: parkin-backend
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT:-4000}:4000"
+    environment:
+      NODE_ENV: production
+      MONGODB_URI: mongodb://${MONGO_USER:-admin}:${MONGO_PASSWORD:-admin123}@mongodb:27017/parkin?authSource=admin
+      JWT_SECRET: ${JWT_SECRET:-change_this_secret_key_in_production}
+      PORT: 4000
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - parkin-network
+    healthcheck:
+      test: curl -f http://localhost:4000/api/health || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Frontend (optional - for production)
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: parkin-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      - backend
+    networks:
+      - parkin-network
+    environment:
+      - VITE_API_BASE=http://backend:4000/api
+    healthcheck:
+      test: wget --quiet --tries=1 --spider http://localhost/ || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+
+networks:
+  parkin-network:
+    driver: bridge
+

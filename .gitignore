@@ -1,0 +1,117 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+mongodb_data/
+mongodb_config/
+
+# OS
+Thumbs.db
+.AppleDouble
+.LSOverride
+*.DS_Store
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# IDE temporary files
+.vscode-test/
+out/
+
+# Node
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Production
+.cache/
+.next/
+out/
+.nuxt/
+dist/
+
+# Misc
+*.pem
+.cache
+.prettierignore
+
+# Testing
+.mocha_output
+test-results/
+
+# Local development
+.localrc
+.localenv
+
+# Compiled Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
